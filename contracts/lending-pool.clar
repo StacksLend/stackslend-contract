@@ -174,6 +174,12 @@
       ;; Load user's existing collateral and borrow information
       (current-collateral (default-to u0 (get amount (map-get? collateral { user: tx-sender }))))
       (current-borrow (default-to u0 (get amount (map-get? borrows { user: tx-sender }))))
+      ;; Calculate new total collateral
+      (new-collateral (+ current-collateral collateral-amount))
+      ;; Fetch current sBTC/STX price
+      (price (unwrap! (get-sbtc-stx-price) ERR_INVALID_ORACLE))
+      ;; Calculate max borrowable amount (LTV ratio)
+      (max-borrow (/ (* (* new-collateral price) LTV_PERCENTAGE) u100))
     )
     (ok true)
   )
