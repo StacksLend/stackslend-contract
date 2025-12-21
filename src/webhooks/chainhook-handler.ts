@@ -1,4 +1,4 @@
-import { ChainhookEvent } from '@hirosystems/chainhooks-client';
+import { ChainhookEvent } from '@hirosystems/chainhook-client';
 import express from 'express';
 import {
   handleDeposit,

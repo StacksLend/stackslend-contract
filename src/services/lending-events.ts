@@ -1,4 +1,4 @@
-import { StacksTransaction } from '@hirosystems/chainhooks-client';
+import { StacksTransaction } from '@hirosystems/chainhook-client';
 
 export interface DepositEvent {
   txId: string;
