@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import chainhookRouter from './webhooks/chainhook-handler';
+import apiRouter from './api/routes';
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // Routes
 app.use('/chainhook', chainhookRouter);
+app.use('/api', apiRouter);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -24,5 +26,6 @@ app.get('/health', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 StacksLend Backend running on port ${PORT}`);
-  console.log(`📡 Chainhook webhook endpoint: http://localhost:${PORT}/chainhook/events`);
+  console.log(`📡 Chainhook webhook: http://localhost:${PORT}/chainhook/events`);
+  console.log(`📊 API endpoints: http://localhost:${PORT}/api`);
 });
