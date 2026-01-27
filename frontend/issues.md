@@ -50,7 +50,7 @@ This document outlines all the issues/tasks required to build the complete dual-
 
 #### Issue #18: Implement Navbar Component
 **Priority:** High  
-**Status:** Pending  
+**Status:** ✅ Completed  
 **Dependencies:** Issue #17
 
 **Tasks:**
@@ -70,7 +70,7 @@ This document outlines all the issues/tasks required to build the complete dual-
 
 #### Issue #19: Implement Root Layout
 **Priority:** High  
-**Status:** Pending  
+**Status:** ✅ Completed  
 **Dependencies:** Issue #18
 
 **Tasks:**
