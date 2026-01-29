@@ -403,7 +403,8 @@
       (let (
           (current-time stacks-block-time)
           (dt (- current-time last-accrued))
-          (interest-numerator (* u10000 (* (* amount INTEREST_RATE_PERCENTAGE) dt)))
+          ;; Interest = (Principal * Rate * Time) / (100 * YearInSecs)
+          (interest-numerator (* amount (* INTEREST_RATE_PERCENTAGE dt)))
           (interest-denominator (* ONE_YEAR_IN_SECS u100))
           (interest (/ interest-numerator interest-denominator))
         )

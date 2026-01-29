@@ -339,7 +339,7 @@ This document outlines all the issues/tasks required to build the complete dual-
 
 #### Issue #10: Implement Get Debt Function
 **Priority:** Medium  
-**Status:** Pending  
+**Status:** ✅ Completed  
 **Dependencies:** Issue #8
 
 **Tasks:**
