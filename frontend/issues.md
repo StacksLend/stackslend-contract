@@ -54,12 +54,12 @@ This document outlines all the issues/tasks required to build the complete dual-
 **Dependencies:** Issue #17
 
 **Tasks:**
-- [ ] Create navbar component with wallet connection button
-- [ ] Display connected wallet address (abbreviated)
-- [ ] Add network switcher (mainnet/testnet)
-- [ ] Add navigation links
-- [ ] Add search bar for addresses
-- [ ] Style with Tailwind CSS
+- [x] Create navbar component with wallet connection button
+- [x] Display connected wallet address (abbreviated)
+- [x] Add network switcher (mainnet/testnet)
+- [x] Add navigation links
+- [x] Add search bar for addresses
+- [x] Style with Tailwind CSS
 
 **Acceptance Criteria:**
 - Navbar displays correctly
@@ -74,10 +74,10 @@ This document outlines all the issues/tasks required to build the complete dual-
 **Dependencies:** Issue #18
 
 **Tasks:**
-- [ ] Update `app/layout.tsx` to include Navbar
-- [ ] Set up global styles
-- [ ] Configure metadata
-- [ ] Ensure Navbar is visible on all pages
+- [x] Update `app/layout.tsx` to include Navbar
+- [x] Set up global styles
+- [x] Configure metadata
+- [x] Ensure Navbar is visible on all pages
 
 **Acceptance Criteria:**
 - Layout is consistent across pages
@@ -93,10 +93,10 @@ This document outlines all the issues/tasks required to build the complete dual-
 **Dependencies:** Issue #16
 
 **Tasks:**
-- [ ] Create `stx-utils.ts` file
-- [ ] Implement `abbreviateAddress` function
-- [ ] Implement `abbreviateTxnId` function
-- [ ] Add proper TypeScript types
+- [x] Create `stx-utils.ts` file
+- [x] Implement `abbreviateAddress` function
+- [x] Implement `abbreviateTxnId` function
+- [x] Add proper TypeScript types
 
 **Acceptance Criteria:**
 - Addresses and transaction IDs are abbreviated correctly
