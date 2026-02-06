@@ -226,7 +226,9 @@ describe("Lending Pool Contract Tests", () => {
           [
             Cl.principal(wallet1),
             Cl.contractPrincipal(deployer, "sbtc-token"),
-            Cl.contractPrincipal(deployer, "sbtc-token") // Mock DEX for now
+            Cl.contractPrincipal(deployer, "sbtc-token"), // Mock DEX
+            Cl.contractPrincipal(deployer, "sbtc-token"), // Mock STX Token
+            Cl.contractPrincipal(deployer, "sbtc-token")  // Mock Pool
           ],
           wallet2
         );

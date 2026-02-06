@@ -72,6 +72,14 @@
   )
 )
 
+;; Bitflow Swap Helper Trait
+(define-trait xyk-swap-helper-trait
+  (
+    (swap-helper-a (<sip-010-trait> <sip-010-trait> <sip-010-trait> uint (optional uint)) (response uint uint))
+    (get-quote-a (<sip-010-trait> <sip-010-trait> <sip-010-trait> uint) (response uint uint))
+  )
+)
+
 ;; ============================================
 ;; Maps
 ;; ============================================
@@ -314,7 +322,9 @@
 (define-public (liquidate
     (user principal)
     (token <sip-010-trait>)
-    (dex <sip-010-trait>)
+    (dex <xyk-swap-helper-trait>)
+    (stx-token <sip-010-trait>)
+    (pool-contract <sip-010-trait>)
   )
   (let (
       (borrow (map-get? borrows { user: user }))
@@ -355,18 +365,43 @@
         (map-delete borrows { user: user })
         (map-delete collateral { user: user })
 
-        ;; 7. Transfer Bounty to Liquidator
-        ;; (unwrap! (as-contract (contract-call? token transfer ...))) - Omitted due to simnet limitation
+        ;; 7. Transfer Bounty to Liquidator (sBTC)
+        ;; Note: Wrapping in as-contract to send from vault
+        ;; Commented out for simnet compatibility
+        ;; (unwrap! 
+        ;;   (as-contract
+        ;;     (contract-call? token transfer
+        ;;       liquidator-bounty
+        ;;       tx-sender ;; contract
+        ;;       tx-sender ;; liquidator (caller)
+        ;;       none
+        ;;     )
+        ;;   )
+        ;;   (err u1)
+        ;; )
 
-        ;; 8. Execute Swap (Simulated Logic)
-        ;; In a real implementation, we would call Bitflow here.
-        ;; For this logic: 
-        ;; - We assume the swap returns enough STX to cover the debt + profit
-        ;; - We transfer the profit to the pool yield
+        ;; 8. Execute Swap (sBTC -> STX) for Pool Reward
+        ;; We need to swap `pool-reward` sBTC to STX to cover the debt
+        ;; Using Bitflow swap-helper
         
-        ;; 9. Update Yield
-        ;; Simplified: Assume swap was perfect and we just clear the debt
-        ;; In reality: (+ cumulative-yield-bips (profit / total-deposits))
+        ;; (unwrap!
+        ;;   (as-contract
+        ;;     (contract-call? dex swap-helper-a
+        ;;       token          ;; token-x (sBTC)
+        ;;       stx-token      ;; token-y (STX)
+        ;;       pool-contract  ;; pool
+        ;;       pool-reward    ;; dx (amount to swap)
+        ;;       none           ;; min-dy (optional)
+        ;;     )
+        ;;   )
+        ;;   (err u1)
+        ;; )
+
+        ;; 9. Update Yield with Profit (if any)
+        ;; Profit = STX received - debt owed.
+        ;; Since we can't get the exact STX received without executing the swap,
+        ;; we assume for now the liquidation breaks even or better.
+        ;; (var-set cumulative-yield-bips ...) 
         
         (ok true)
       )
