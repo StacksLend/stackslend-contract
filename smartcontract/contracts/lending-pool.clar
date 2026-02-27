@@ -323,6 +323,7 @@
       (deposited-sbtc (default-to u0 (get amount collateral-entry)))
       (price-data (unwrap! (get-sbtc-stx-price) ERR_INVALID_ORACLE))
       (price price-data)
+      (liquidator tx-sender)
     )
     ;; 1. Check if user has debt
     (asserts! (> user-debt u0) ERR_CANNOT_BE_LIQUIDATED)
@@ -356,19 +357,42 @@
         (map-delete collateral { user: user })
 
         ;; 7. Transfer Bounty to Liquidator
-        ;; (unwrap! (as-contract (contract-call? token transfer ...))) - Omitted due to simnet limitation
+        (unwrap! 
+          (as-contract 
+            (contract-call? token transfer 
+              liquidator-bounty 
+              (as-contract tx-sender) 
+              liquidator 
+              none
+            )
+          ) 
+          (err u1)
+        )
 
-        ;; 8. Execute Swap (Simulated Logic)
-        ;; In a real implementation, we would call Bitflow here.
-        ;; For this logic: 
-        ;; - We assume the swap returns enough STX to cover the debt + profit
-        ;; - We transfer the profit to the pool yield
-        
-        ;; 9. Update Yield
-        ;; Simplified: Assume swap was perfect and we just clear the debt
-        ;; In reality: (+ cumulative-yield-bips (profit / total-deposits))
-        
-        (ok true)
+        ;; 8. Execute Swap on Bitflow DEX
+        ;; In production, we call .xyk-swap-helper-v-1-3
+        ;; Here we simulate the swap: 
+        ;; pool-reward (sBTC) -> STX
+        (let (
+            ;; Simulating swap amount (Simplified: reward * price)
+            (swap-amount (* pool-reward price))
+            (profit (if (> swap-amount forfeited-borrows)
+                      (- swap-amount forfeited-borrows)
+                      u0))
+          )
+          ;; Update Yield if there's profit
+          (if (> profit u0)
+            (var-set cumulative-yield-bips
+              (+ (var-get cumulative-yield-bips) (/ (* profit u10000) (var-get total-stx-deposits)))
+            )
+            true
+          )
+
+          ;; Transfer remaining collateral to a safe storage (or swap recipient)
+          ;; Note: Simplified for this logic as actual Bitflow integration requires specific trait setups
+          
+          (ok true)
+        )
       )
     )
   )
